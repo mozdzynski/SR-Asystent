@@ -1,0 +1,92 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User profile information and role.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "User's full name" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "role": { "type": "string", "enum": ["technician", "admin"], "description": "User's role in the system" },
+        "photoURL": { "type": "string", "description": "URL to user's profile photo" }
+      },
+      "required": ["uid", "displayName", "email", "role"]
+    },
+    "Message": {
+      "title": "Chat Message",
+      "description": "A single message in a chat conversation.",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "assistant"], "description": "The role of the message sender" },
+        "content": { "type": "string", "description": "The text content of the message" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "When the message was sent" },
+        "userId": { "type": "string", "description": "The UID of the user this message belongs to" }
+      },
+      "required": ["role", "content", "timestamp", "userId"]
+    },
+    "TechnicalDocument": {
+      "title": "Technical Document",
+      "description": "A document uploaded to the knowledge base.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Filename of the document" },
+        "size": { "type": "string", "description": "Human-readable file size" },
+        "date": { "type": "string", "format": "date", "description": "Upload date" },
+        "url": { "type": "string", "description": "URL to the document (if stored in Storage)" },
+        "category": { "type": "string", "enum": ["norm", "manual", "best_practice"], "description": "Category of the document" }
+      },
+      "required": ["name", "size", "date"]
+    },
+    "Note": {
+      "title": "Note",
+      "description": "A text note created by a user.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "UID of the user who created the note" },
+        "content": { "type": "string", "description": "The text content of the note" },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "Tags for the note (e.g., device ID, location)" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the note was created" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "When the note was last updated" }
+      },
+      "required": ["userId", "content", "createdAt"]
+    },
+    "Reminder": {
+      "title": "Reminder",
+      "description": "A reminder for a future task or follow-up.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "UID of the user who created the reminder" },
+        "noteId": { "type": "string", "description": "Optional ID of a note this reminder is linked to" },
+        "title": { "type": "string", "description": "The title of the reminder" },
+        "description": { "type": "string", "description": "Optional detailed description" },
+        "remindAt": { "type": "string", "format": "date-time", "description": "When the reminder should trigger" },
+        "status": { "type": "string", "enum": ["pending", "triggered", "dismissed"], "description": "Current status of the reminder" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the reminder was created" }
+      },
+      "required": ["userId", "title", "remindAt", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile documents."
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Global collection of chat messages, filtered by userId."
+    },
+    "/documents/{docId}": {
+      "schema": "TechnicalDocument",
+      "description": "Knowledge base documents accessible to all authenticated users."
+    },
+    "/notes/{noteId}": {
+      "schema": "Note",
+      "description": "User-specific notes."
+    },
+    "/reminders/{reminderId}": {
+      "schema": "Reminder",
+      "description": "User-specific reminders."
+    }
+  }
+}

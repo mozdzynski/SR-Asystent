@@ -1,0 +1,5 @@
+{
+  "name": "SR Serwis - Asystent Serwisanta",
+  "description": "Asystent AI dla serwisantów wind i schodów ruchomych firmy SR Serwis z Gdańska. Udziela odpowiedzi na pytania o normy, kody błędów i instrukcje na podstawie wgranych dokumentów.",
+  "requestFramePermissions": ["microphone", "camera"]
+}
